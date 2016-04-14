@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- saved from url=(0014)about:internet -->
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta name="keywords" content="keywords" />
+	<meta name="description" content="description" />
+
+	<title>SKU-to-Bike Search Creation System</title>
+
+	<link rel="stylesheet" type="text/css" charset="utf-8" href="templates/creator-stylesheet.css" />
+
+	<!--[if lte IE 6]><link href="output/assets/style/ie6styles.css" rel="stylesheet" type="text/css" /><![endif]-->
+	<!--[if IE 7]><link href="output/assets/style/ie7styles.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+	<!-- Global Libraries !-->
+	<script type="text/javascript" src="output/english/assets/javascript/library/jquery.js"></script>
+	<script type="text/javascript" src="output/english/assets/javascript/config.js"></script>
+	<script type="text/javascript" src="output/english/assets/javascript/main.js"></script>
+	<script type="text/javascript" src="output/english/assets/javascript/functions.js"></script>
+	<script type="text/javascript" src="output/english/assets/javascript/plugins.js"></script>
+
+</head>
+
+
+<body class="specialized">
+	<div id="wrapper">
+		<div id="logo">Specialized Bicycles</div>
+		<div id="content-top"></div>
+		<div id="content" class="creator">
+
+		<p>Please select the type of content you wish to generate</p>
+
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$('form').submit(function() {
+				var url = $(this).attr('action');
+				$('#submit').attr('disabled','disabled');
+
+				var mode = $('input[name=mode]:checked').val();
+
+				if(mode == 'html') {
+					$('.results').removeClass('success').html('Currently creating documentation files... (Processing...this one takes awhile.) <img src="output/english/assets/images/loader.gif" />');
+				}
+				if(mode == 'json') {
+					$('.results').removeClass('success').html('Currently creating SKU file (Processing...) <img src="output/english/assets/images/loader.gif" />');
+				}
+				if(mode == 'image') {
+					$('.results').removeClass('success').html('Currently moving and creating thumbnail images... (Processing...) <img src="output/english/assets/images/loader.gif" />');
+				}
+				if(mode == 'pdf') {
+					$('.results').removeClass('success').html('Currently copying PDFs and renaming... (Processing...this one takes awhile.) <img src="output/english/assets/images/loader.gif" />');
+				}
+
+				var data = {
+					bikexml: $('#bikexml').val(),
+					componentxml: $('#componentxml').val(),
+					skuxml: $('#skuxml').val(),
+					mode: mode,
+					language: $('#language').val(),
+				}
+				$.ajax({
+					  url: url,
+					  type: "POST",
+					  data: data,
+					  timeout: 99999,
+					  success: function(text){
+						 $('.results').html(text).addClass('success');
+					  }
+				   }
+				);
+
+				$('.results').slideDown(300);
+
+				return false;
+			});
+
+
+		});
+
+
+		</script>
+		<form action="creator.php" method="post">
+
+			<fieldset>
+				<legend>Configuration</legend>
+
+				<label>Input Bike XML:</label>
+				<input type="text" id="bikexml" name="bikexml" value="input/bikes.xml" />
+				
+				<label>Input SKU XML:</label>
+				<input type="text" id="skuxml" name="skuxml" value="input/sku_map.xml" />
+
+				<label>Input Component XML:</label>
+				<input type="text" id="componentxml" name="componentxml" value="input/components.xml" />
+
+				<label>PDF Translation XML:</label>
+				<input type="text" id="pdfxml" name="pdfxml" value="input/pdftranslation.xml" />
+
+			</fieldset>
+
+			<fieldset>
+				<legend>File Creation</legend>
+
+				<label>Generate files:</label>
+				<div class="radio">
+					<input type="radio" name="mode" value="json" checked="checked"/><em>SKU Generate</em>
+					<input type="radio" name="mode" value="html" /><em>HTML</em>
+				</div>
+				<label>Language:</label>
+				<select id="language" name="language">
+					<option value="english">English</option>
+				</select>
+			</fieldset>
+			<input type="submit" value="Submit" class="submit"/>
+			<div class="clear"></div>
+		</form>
+
+		<div class="results"></div>
+
+		</div>
+		<div id="content-bottom"></div>
+	</div>
+</body>
+</html>
