@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns:od="urn:schemas-microsoft-com:officedata" generated="2016-03-31T16:03:25">
+  <component>
+    <bikeid>20026</bikeid>
+    <name>2005 Tarmac Road Frame Instruction Guide</name>
+    <type>Instruction Guide</type>
+    <vendor>2005 Tarmac Road Frame</vendor>
+    <pdf>05_Tarmac_Road_Frame_instructions.pdf</pdf>
+    <description><![CDATA[2005 Tarmac Road Frame]]></description>
+  </component>
+  <component>
+    <bikeid>20026</bikeid>
+    <name>BPSA/CEN Owners Manual Manuals</name>
+    <type>Manuals</type>
+    <vendor>BPSA/CEN Owners Manual</vendor>
+    <pdf>0000023116_EN_AS_NZ_Web.pdf</pdf>
+    <description><![CDATA[BPSA/CEN Owners Manual]]></description>
+  </component>
+</components>
