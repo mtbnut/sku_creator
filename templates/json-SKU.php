@@ -12,8 +12,9 @@ JSON;
 	return $json;
 } 
 
-function defineBikeJSON($bikes, $skusArray) {
-	
+//$json = defineBikeJSON($bikes, $theskus);	
+
+function defineBikeJSON($bikes, $theskus) {
 	$json['specialized'] = '';
 	$json['globe'] = '';
 		
@@ -24,29 +25,31 @@ function defineBikeJSON($bikes, $skusArray) {
 		if(!in_array($name, $nameArray, true)) {
 			$bikeArray[] = $bike;
 			$nameArray[] = $name;
+			$theSkus[] = $skus;
 	}	
 	}	
-	array_multisort($nameArray, SORT_DESC, $bikeArray, SORT_ASC, $skusArray, SORT_ASC);
+	array_multisort($nameArray, SORT_DESC, $bikeArray, SORT_ASC);
+	
 	reset($bikeArray);
 	
-	foreach($bikeArray as $bike) { // this is iterating through the primary spreadsheet
+	foreach($bikeArray as $bike) { 			// this is iterating through the primary spreadsheet
 		$name = trim(addslashes($bike->name));
 		$model = trim(addslashes($bike->modelname));
-		// make name ok for file
+											// make name ok for file
 		$hash = preg_replace('#[^A-Za-z0-9_-]#','-', str_replace(' ', '-', str_replace('  ', ' ', $bike->name)) );
 		$link = $file = '../assets/bikes/icons/' . $hash . '.jpg';
 		$family = trim(strtolower($bike->family));	
-
-        foreach($skusArray as $skusTemp){  // iterate through the SKUs xml document
-          if($skusArray.id === $bike.id){  // if `this` sku matches the mpl product id for `this` bike
-          	$sku[] = $skusTemp; // append `this` sku to the temporary skus array
+		
+    foreach($theSkus as $skus)	{ 			// iterate through the SKUs xml document
+          if($skus->id === $bike->id){   // if `this` sku matches the mpl product id for `this` bike
+          	$theSkus[] = $skus; 				// append `this` sku to the temporary skus array
           }
         }
-        
-        if(count($skusArray) > 0){  // check to see if the temporary skus array contains data
-        	$bike->sku = $skusArray;  // if yes then append it to the bike object
+
+        if(count($sku) > 0){  // check to see if the temporary skus array contains data
+        	$skusTemp->sku = $theskus;  // if yes then append it to the bike object
         }
-	
+
 $json[$family] .= <<<JSON
 	{
 		"year": "{$bike->year}",
@@ -55,9 +58,7 @@ $json[$family] .= <<<JSON
 		"type": "{$bike->family}",
 		"bikeLink": "http://service.specialized.com/productfinder/products/{$hash}.html",
 		"image": "http://service.specialized.com/productfinder/assets/images/{$bike->originaljpg}",
-		"skus": [
-		  $skusArray
-		],
+		"skus": [{$theSkus}]
 	},
 
 JSON;
